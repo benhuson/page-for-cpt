@@ -45,6 +45,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 	add_action( 'admin_init', array( 'Page_For_CPT', 'init_settings_field' ), 500 );
 
+	add_filter( 'body_class', array( 'Page_For_CPT', 'body_class' ) );
+
 	/**
 	 * Page for Custom Post Type Class
 	 */
@@ -163,6 +165,35 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			}
 
 			return false;
+
+		}
+
+		public static function body_class( $classes ) {
+
+			if ( is_post_type_archive() ) {
+
+				foreach ( Page_For_CPT::$post_types as $post_type ) {
+					if ( is_post_type_archive( $post_type ) ) {
+
+						$page_for_cpt = (array) get_option( 'page_for_cpt' );
+						if ( isset( $page_for_cpt[ $post_type ] ) && apply_filters( 'page_for_cpt_use_page_body_classes', false, $post_type ) ) {
+
+							// Add page classes
+							$classes[] = 'page';
+							$classes[] = 'page-' . $page_for_cpt[ $post_type ];
+							$classes[] = 'page-template-default';
+
+							// Remove general archive classes
+							$classes = array_diff( $classes, array( 'archive', 'post-type-archive' ) );
+						}
+
+						break;
+					}
+				}
+
+			}
+
+			return $classes;
 
 		}
 
