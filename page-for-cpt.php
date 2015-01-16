@@ -214,6 +214,18 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		public static function get_page_for_post_type( $post_type ) {
+
+			$page_for_cpt = (array) get_option( 'page_for_cpt' );
+
+			if ( isset( $page_for_cpt[ $post_type ] ) ) {
+				return $page_for_cpt[ $post_type ];
+			}
+
+			return 0;
+
+		}
+
 	}
 
 }
