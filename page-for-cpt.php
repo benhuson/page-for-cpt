@@ -197,6 +197,23 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		public static function get_post_type_for_page() {
+
+			if ( is_page() ) {
+
+				$page_for_cpt = (array) get_option( 'page_for_cpt' );
+				$post_type = array_search( get_queried_object_id(), $page_for_cpt );
+
+				if ( post_type_exists( $post_type ) ) {
+					return $post_type;
+				}
+
+			}
+
+			return false;
+
+		}
+
 	}
 
 }
