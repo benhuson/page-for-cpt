@@ -50,7 +50,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				'default'
 			);
 
-			register_setting( 'reading', 'page_for_cpt' );
+			register_setting( 'reading', 'page_for_cpt', array( 'Page_For_CPT', 'validate_setting_field' ) );
 
 		}
 
@@ -106,6 +106,29 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				<span class="description"><?php _e( '(No custom post types available)', PAGE_FOR_CPT_TEXTDOMAIN ); ?></span>
 				<?php
 			}
+
+		}
+
+		/**
+		 * Validate Setting Field
+		 *
+		 * When settings are changed, flush rewrite rules.
+		 *
+		 * @since  0.3
+		 * @internal
+		 *
+		 * @param   string  $value  Value.
+		 * @return  string          Validated value.
+		 */
+		public static function validate_setting_field( $value ) {
+
+			$page_for_cpt = (array) get_option( 'page_for_cpt' );
+
+			if ( $value !== $page_for_cpt ) {
+				flush_rewrite_rules( true );
+			}
+
+			return $value;
 
 		}
 
