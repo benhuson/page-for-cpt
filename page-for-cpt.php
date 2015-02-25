@@ -44,7 +44,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			add_settings_field(
 				'page_for_cpt',
-				__( 'Pages for Post Types', 'page-for-cpt' ),
+				__( 'Pages for Post Types', PAGE_FOR_CPT_TEXTDOMAIN ),
 				array( 'Page_For_CPT', 'setting_field' ),
 				'reading',
 				'default'
@@ -85,7 +85,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
 								'echo'              => 0,
-								'show_option_none'  => __( '&mdash; Select &mdash;', 'page-for-cpt' ),
+								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', PAGE_FOR_CPT_TEXTDOMAIN ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
 							) ) );
@@ -98,7 +98,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				echo '</ul>';
 			} else {
 				?>
-				<span class="description"><?php _e( '(No custom post types available)', 'page-for-cpt' ); ?></span>
+				<span class="description"><?php _e( '(No custom post types available)', PAGE_FOR_CPT_TEXTDOMAIN ); ?></span>
 				<?php
 			}
 
