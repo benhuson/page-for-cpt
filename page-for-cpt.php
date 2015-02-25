@@ -64,7 +64,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			) ) );
 
 			if ( count( $post_types ) > 0 ) {
-				echo '<ul>';
+				echo '<table class="page-for-cpt">';
 				foreach ( $post_types as $post_type ) {
 
 					// Skip invalid post types
@@ -78,24 +78,29 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 					?>
 
-					<li>
-						<label for="<?php echo $id; ?>">
+					<tr>
+						<td>
+							<label for="<?php echo $id; ?>"><?php echo $post_type->label; ?>:</label>
+						</td>
+						<td>
 							<?php
-							printf( __( '%s: %s' ), $post_type->label, wp_dropdown_pages( array(
+
+							wp_dropdown_pages( array(
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
-								'echo'              => 0,
 								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', PAGE_FOR_CPT_TEXTDOMAIN ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
-							) ) );
+							) );
+
 							?>
-						</label>
-					</li>
+						</td>
+					</tr>
 
 					<?php
 				}
-				echo '</ul>';
+				echo '</table>';
+				echo '<style>table.page-for-cpt td { padding: 0 20px 0.5em 0; }</style>';
 			} else {
 				?>
 				<span class="description"><?php _e( '(No custom post types available)', PAGE_FOR_CPT_TEXTDOMAIN ); ?></span>
