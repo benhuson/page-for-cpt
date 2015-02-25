@@ -88,7 +88,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 							wp_dropdown_pages( array(
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
-								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Not Set', 'menu option', PAGE_FOR_CPT_TEXTDOMAIN ) ),
+								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', PAGE_FOR_CPT_TEXTDOMAIN ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
 							) );
