@@ -80,7 +80,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 					}
 
 					$post_type = get_post_type_object( $post_type );
-					$selected = isset( $page_for_cpt[ $post_type->name ] ) ? $page_for_cpt[ $post_type->name ] : '';
+					$selected = self::get_page_for_post_type( $post_type->name );
+
 					$id = 'page_for_cpt_' . sanitize_key( $post_type->name );
 
 					?>
@@ -158,11 +159,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( post_type_exists( $post_type ) ) {
 
-				$page_for_cpt = self::get_page_for_cpt_option();
+				$page_id = self::get_page_for_post_type( $post_type );
 
-				if ( array_key_exists( $post_type, $page_for_cpt ) ) {
-
-					$page_id = $page_for_cpt[ $post_type ];
+				if ( $page_id > 0 ) {
 
 					if ( 'page' == get_post_type( $page_id ) && 'publish' == get_post_status( $page_id ) ) {
 						$post = get_post( $page_id );
@@ -190,13 +189,13 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				foreach ( self::$post_types as $post_type ) {
 					if ( is_post_type_archive( $post_type ) ) {
 
-						$page_for_cpt = self::get_page_for_cpt_option();
+						$page_id = self::get_page_for_post_type( $post_type );
 
-						if ( isset( $page_for_cpt[ $post_type ] ) && apply_filters( 'page_for_cpt_use_page_body_classes', false, $post_type ) ) {
+						if ( $page_id > 0 && apply_filters( 'page_for_cpt_use_page_body_classes', false, $post_type ) ) {
 
 							// Add page classes
 							$classes[] = 'page';
-							$classes[] = 'page-' . $page_for_cpt[ $post_type ];
+							$classes[] = 'page-' . $page_id;
 							$classes[] = 'page-template-default';
 
 							// Remove general archive classes
@@ -297,7 +296,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			$page_for_cpt = self::get_page_for_cpt_option();
 
 			if ( isset( $page_for_cpt[ $post_type ] ) ) {
-				return $page_for_cpt[ $post_type ];
+				return absint( $page_for_cpt[ $post_type ] );
 			}
 
 			return 0;
@@ -349,12 +348,11 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( in_array( $post_type, $post_types ) ) {
 
-				$page_for_cpt = self::get_page_for_cpt_option();
+				$page_for_cpt = self::get_page_for_post_type( $post_type );
 
-				if ( isset( $page_for_cpt[ $post_type ] ) ) {
+				if ( $page_for_cpt > 0 ) {
 
-					$page_id = absint( $page_for_cpt[ $post_type ] );
-					$uri = get_page_uri( $page_id );
+					$uri = get_page_uri( $page_for_cpt );
 
 					// If a page is assigned, use that for the rewrite rules.
 					if ( ! empty( $uri ) ) {
