@@ -16,9 +16,6 @@ define( 'PAGE_FOR_CPT_SUBDIR', '/' . str_replace( basename( __FILE__ ), '', PAGE
 define( 'PAGE_FOR_CPT_URL', plugins_url( PAGE_FOR_CPT_SUBDIR ) );
 define( 'PAGE_FOR_CPT_DIR', plugin_dir_path( __FILE__ ) );
 
-// i18n
-define( 'PAGE_FOR_CPT_TEXTDOMAIN', 'page-for-cpt' );
-
 // Don't load if class already exists
 if ( ! class_exists( 'Page_For_CPT' ) ) {
 
@@ -34,6 +31,11 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 	class Page_For_CPT {
 
 		/**
+		 * i18n Text Domain
+		 */
+		const TEXTDOMAIN = 'page-for-cpt';
+
+		/**
 		 * Post Types
 		 *
 		 * @var  array
@@ -47,7 +49,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			add_settings_field(
 				'page_for_cpt',
-				__( 'Pages for Post Types', PAGE_FOR_CPT_TEXTDOMAIN ),
+				__( 'Pages for Post Types', Page_For_CPT::TEXTDOMAIN ),
 				array( 'Page_For_CPT', 'setting_field' ),
 				'reading',
 				'default'
@@ -96,7 +98,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 							wp_dropdown_pages( array(
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
-								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', PAGE_FOR_CPT_TEXTDOMAIN ) ),
+								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', Page_For_CPT::TEXTDOMAIN ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
 							) );
@@ -116,7 +118,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 				?>
 
-				<span class="description"><?php _e( '(No custom post types available)', PAGE_FOR_CPT_TEXTDOMAIN ); ?></span>
+				<span class="description"><?php _e( '(No custom post types available)', Page_For_CPT::TEXTDOMAIN ); ?></span>
 
 				<?php
 
