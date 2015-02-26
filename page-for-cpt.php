@@ -23,9 +23,7 @@ define( 'PAGE_FOR_CPT_TEXTDOMAIN', 'page-for-cpt' );
 if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 	add_action( 'admin_init', array( 'Page_For_CPT', 'init_settings_field' ), 500 );
-
 	add_filter( 'body_class', array( 'Page_For_CPT', 'body_class' ) );
-
 	add_action( 'registered_post_type', array( 'Page_For_CPT', 'registered_post_type' ), 5, 2 );
 
 	/**
@@ -40,6 +38,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static $post_types = array();
 
+		/**
+		 * Init Settings Field
+		 */
 		public static function init_settings_field() {
 
 			add_settings_field(
@@ -54,6 +55,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		/**
+		 * Setting Field
+		 */
 		public static function setting_field() {
 
 			$page_for_cpt = (array) get_option( 'page_for_cpt' );
@@ -64,7 +68,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			) ) );
 
 			if ( count( $post_types ) > 0 ) {
+
 				echo '<table class="page-for-cpt">';
+
 				foreach ( $post_types as $post_type ) {
 
 					// Skip invalid post types
@@ -98,13 +104,20 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 					</tr>
 
 					<?php
+
 				}
+
 				echo '</table>';
 				echo '<style>table.page-for-cpt td { padding: 0 20px 0.5em 0; }</style>';
+
 			} else {
+
 				?>
+
 				<span class="description"><?php _e( '(No custom post types available)', PAGE_FOR_CPT_TEXTDOMAIN ); ?></span>
+
 				<?php
+
 			}
 
 		}
@@ -132,6 +145,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		/**
+		 * The Post
+		 *
+		 * @param   string   $post_type  Post type.
+		 * @return  boolean
+		 */
 		public static function the_post( $post_type ) {
 
 			global $post;
@@ -143,10 +162,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				if ( array_key_exists( $post_type, $page_for_cpt ) ) {
 
 					$page_id = $page_for_cpt[ $post_type ];
+
 					if ( 'page' == get_post_type( $page_id ) && 'publish' == get_post_status( $page_id ) ) {
 						$post = get_post( $page_id );
 						return setup_postdata( $post );
 					}
+
 				}
 
 			}
@@ -155,6 +176,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		/**
+		 * Body Class
+		 *
+		 * @param   array  $classes  Body classes.
+		 * @return  array            Body classes.
+		 */
 		public static function body_class( $classes ) {
 
 			if ( is_post_type_archive() ) {
@@ -163,6 +190,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 					if ( is_post_type_archive( $post_type ) ) {
 
 						$page_for_cpt = (array) get_option( 'page_for_cpt' );
+
 						if ( isset( $page_for_cpt[ $post_type ] ) && apply_filters( 'page_for_cpt_use_page_body_classes', false, $post_type ) ) {
 
 							// Add page classes
@@ -172,9 +200,11 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 							// Remove general archive classes
 							$classes = array_diff( $classes, array( 'archive', 'post-type-archive' ) );
+
 						}
 
 						break;
+
 					}
 				}
 
@@ -184,6 +214,11 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		/**
+		 * Get Post Type for Page
+		 *
+		 * @return  string|false  Post type.
+		 */
 		public static function get_post_type_for_page() {
 
 			if ( is_page() ) {
@@ -201,6 +236,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		}
 
+		/**
+		 * Get Page for Post Type
+		 *
+		 * @param   string  $post_type  Post type.
+		 * @return  int                 Post ID.
+		 */
 		public static function get_page_for_post_type( $post_type ) {
 
 			$page_for_cpt = (array) get_option( 'page_for_cpt' );
