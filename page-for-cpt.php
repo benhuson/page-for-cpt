@@ -66,10 +66,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			$page_for_cpt = (array) get_option( 'page_for_cpt' );
 
-			$post_types = array_keys( get_post_types( array(
-				'public'   => true,
-				'_builtin' => false
-			) ) );
+			$post_types = self::get_public_post_types();
 
 			if ( count( $post_types ) > 0 ) {
 
@@ -308,6 +305,20 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		}
 
 		/**
+		 * Get Public Post Types
+		 *
+		 * @return  array  Post types.
+		 */
+		public static function get_public_post_types() {
+
+			return array_keys( get_post_types( array(
+				'public'   => true,
+				'_builtin' => false
+			) ) );
+
+		}
+
+		/**
 		 * Registered Post Type
 		 *
 		 * Called by the `registered_post_type` hook when a new post type is registered.
@@ -323,10 +334,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			global $wp_post_types;
 
 			// Get all public custom post types.
-			$post_types = get_post_types( array(
-				'public'   => true,
-				'_builtin' => false
-			) );
+			$post_types = self::get_public_post_types();
 
 			if ( in_array( $post_type, $post_types ) ) {
 
