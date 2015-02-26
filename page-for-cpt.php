@@ -64,7 +64,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function setting_field() {
 
-			$page_for_cpt = (array) get_option( 'page_for_cpt' );
+			$page_for_cpt = self::get_page_for_cpt_option();
 
 			$post_types = self::get_public_post_types();
 
@@ -136,7 +136,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function validate_setting_field( $value ) {
 
-			$page_for_cpt = (array) get_option( 'page_for_cpt' );
+			$page_for_cpt = self::get_page_for_cpt_option();
 
 			if ( $value !== $page_for_cpt ) {
 				flush_rewrite_rules( true );
@@ -158,7 +158,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( post_type_exists( $post_type ) ) {
 
-				$page_for_cpt = (array) get_option( 'page_for_cpt' );
+				$page_for_cpt = self::get_page_for_cpt_option();
 
 				if ( array_key_exists( $post_type, $page_for_cpt ) ) {
 
@@ -190,7 +190,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				foreach ( Page_For_CPT::$post_types as $post_type ) {
 					if ( is_post_type_archive( $post_type ) ) {
 
-						$page_for_cpt = (array) get_option( 'page_for_cpt' );
+						$page_for_cpt = self::get_page_for_cpt_option();
 
 						if ( isset( $page_for_cpt[ $post_type ] ) && apply_filters( 'page_for_cpt_use_page_body_classes', false, $post_type ) ) {
 
@@ -273,7 +273,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( is_page() ) {
 
-				$page_for_cpt = (array) get_option( 'page_for_cpt' );
+				$page_for_cpt = self::get_page_for_cpt_option();
 				$post_type = array_search( get_queried_object_id(), $page_for_cpt );
 
 				if ( post_type_exists( $post_type ) ) {
@@ -294,13 +294,24 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function get_page_for_post_type( $post_type ) {
 
-			$page_for_cpt = (array) get_option( 'page_for_cpt' );
+			$page_for_cpt = self::get_page_for_cpt_option();
 
 			if ( isset( $page_for_cpt[ $post_type ] ) ) {
 				return $page_for_cpt[ $post_type ];
 			}
 
 			return 0;
+
+		}
+
+		/**
+		 * Get Page for CPT Option
+		 *
+		 * @return  array  Option data.
+		 */
+		public static function get_page_for_cpt_option() {
+
+			return (array) get_option( 'page_for_cpt' );
 
 		}
 
@@ -338,7 +349,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( in_array( $post_type, $post_types ) ) {
 
-				$page_for_cpt = (array) get_option( 'page_for_cpt' );
+				$page_for_cpt = self::get_page_for_cpt_option();
 
 				if ( isset( $page_for_cpt[ $post_type ] ) ) {
 
