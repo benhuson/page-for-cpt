@@ -24,6 +24,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 	add_action( 'admin_init', array( 'Page_For_CPT', 'init_settings_field' ), 500 );
 	add_filter( 'body_class', array( 'Page_For_CPT', 'body_class' ) );
+	add_filter( 'get_the_archive_title', array( 'Page_For_CPT', 'get_the_archive_title' ) );
+	add_filter( 'get_the_archive_description', array( 'Page_For_CPT', 'get_the_archive_description' ) );
 	add_action( 'registered_post_type', array( 'Page_For_CPT', 'registered_post_type' ), 5, 2 );
 
 	/**
@@ -211,6 +213,55 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			}
 
 			return $classes;
+
+		}
+
+		/**
+		 * Get The Archive Title
+		 *
+		 * @since  0.3
+		 *
+		 * @param   string  $title  Archive title.
+		 * @return  string          Filtered archive title.
+		 */
+		public static function get_the_archive_title( $title ) {
+
+			if ( is_post_type_archive() ) {
+
+				$page_id = self::get_page_for_post_type( get_post_type() );
+
+				if ( $page_id > 0 ) {
+					$title = get_the_title( $page_id );
+				}
+
+			}
+
+			return $title;
+
+		}
+
+		/**
+		 * Get The Archive Description
+		 *
+		 * @since  0.3
+		 *
+		 * @param   string  $description  Archive description.
+		 * @return  string                Filtered archive description.
+		 */
+		public static function get_the_archive_description( $description ) {
+
+			if ( is_post_type_archive() ) {
+
+				$page_id = self::get_page_for_post_type( get_post_type() );
+
+				if ( $page_id > 0 ) {
+					$page = get_post( $page_id );
+					$description = apply_filters( 'the_content', $page->post_content );
+				}
+
+			}
+
+			return $description;
 
 		}
 
