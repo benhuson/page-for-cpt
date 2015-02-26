@@ -49,7 +49,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			add_settings_field(
 				'page_for_cpt',
-				__( 'Pages for Post Types', Page_For_CPT::TEXTDOMAIN ),
+				__( 'Pages for Post Types', self::TEXTDOMAIN ),
 				array( 'Page_For_CPT', 'setting_field' ),
 				'reading',
 				'default'
@@ -95,7 +95,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 							wp_dropdown_pages( array(
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
-								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', Page_For_CPT::TEXTDOMAIN ) ),
+								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', self::TEXTDOMAIN ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
 							) );
@@ -115,7 +115,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 				?>
 
-				<span class="description"><?php _e( '(No custom post types available)', Page_For_CPT::TEXTDOMAIN ); ?></span>
+				<span class="description"><?php _e( '(No custom post types available)', self::TEXTDOMAIN ); ?></span>
 
 				<?php
 
@@ -187,7 +187,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			if ( is_post_type_archive() ) {
 
-				foreach ( Page_For_CPT::$post_types as $post_type ) {
+				foreach ( self::$post_types as $post_type ) {
 					if ( is_post_type_archive( $post_type ) ) {
 
 						$page_for_cpt = self::get_page_for_cpt_option();
