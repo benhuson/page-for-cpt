@@ -388,7 +388,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function add_post_type_rewrite_rules( $post_type, $args ) {
 
-			global $wp_post_types;
+			global $wp_post_types, $wp_rewrite;
 
 			if ( is_admin() || '' != get_option( 'permalink_structure' ) ) {
 
