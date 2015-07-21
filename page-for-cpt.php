@@ -224,9 +224,13 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function get_the_archive_title( $title ) {
 
-			if ( is_post_type_archive() ) {
+			if ( is_post_type_archive() || is_home() ) {
 
-				$page_id = self::get_page_for_post_type( get_post_type() );
+				if ( is_home() ) {
+					$page_id = get_option( 'page_for_posts' );
+				} else {
+					$page_id = self::get_page_for_post_type( get_post_type() );
+				}
 
 				if ( $page_id > 0 ) {
 					$title = get_the_title( $page_id );
@@ -248,9 +252,13 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 */
 		public static function get_the_archive_description( $description ) {
 
-			if ( is_post_type_archive() ) {
+			if ( is_post_type_archive() || is_home() ) {
 
-				$page_id = self::get_page_for_post_type( get_post_type() );
+				if ( is_home() ) {
+					$page_id = get_option( 'page_for_posts' );
+				} else {
+					$page_id = self::get_page_for_post_type( get_post_type() );
+				}
 
 				if ( $page_id > 0 ) {
 					$page = get_post( $page_id );
