@@ -27,11 +27,6 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 	class Page_For_CPT {
 
 		/**
-		 * i18n Text Domain
-		 */
-		const TEXTDOMAIN = 'page-for-cpt';
-
-		/**
 		 * Post Types
 		 *
 		 * @var  array
@@ -59,7 +54,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 			add_settings_field(
 				'page_for_cpt',
-				__( 'Pages for Post Types', self::TEXTDOMAIN ),
+				__( 'Pages for Post Types', 'page-for-cpt' ),
 				array( 'Page_For_CPT', 'setting_field' ),
 				'reading',
 				'default'
@@ -106,7 +101,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 							wp_dropdown_pages( array(
 								'id'                => $id,
 								'name'              => 'page_for_cpt[' . $post_type->name . ']',
-								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', self::TEXTDOMAIN ) ),
+								'show_option_none'  => sprintf( '&mdash; %s &mdash;', _x( 'Select', 'menu option', 'page-for-cpt' ) ),
 								'option_none_value' => '0',
 								'selected'          => $selected
 							) );
@@ -126,7 +121,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 				?>
 
-				<span class="description"><?php _e( '(No custom post types available)', self::TEXTDOMAIN ); ?></span>
+				<span class="description"><?php _e( '(No custom post types available)', 'page-for-cpt' ); ?></span>
 
 				<?php
 
