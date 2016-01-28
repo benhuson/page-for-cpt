@@ -362,7 +362,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			// Get all public custom post types.
 			$post_types = self::get_public_post_types();
 
-			if ( $args['public'] ) {
+			if ( isset( $args['public'] ) && $args['public'] && ( ! isset( $args['_builtin'] ) || ! $args['_builtin'] ) ) {
 
 				$page_for_cpt = self::get_page_for_post_type( $post_type );
 
