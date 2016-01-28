@@ -10,12 +10,6 @@ Version: 0.3
 License: GPLv2
 */
 
-// Plugin directory and url paths.
-define( 'PAGE_FOR_CPT_BASENAME', plugin_basename( __FILE__ ) );
-define( 'PAGE_FOR_CPT_SUBDIR', '/' . str_replace( basename( __FILE__ ), '', PAGE_FOR_CPT_BASENAME ) );
-define( 'PAGE_FOR_CPT_URL', plugins_url( PAGE_FOR_CPT_SUBDIR ) );
-define( 'PAGE_FOR_CPT_DIR', plugin_dir_path( __FILE__ ) );
-
 // Don't load if class already exists
 if ( ! class_exists( 'Page_For_CPT' ) ) {
 
@@ -25,6 +19,13 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 	 * Page for Custom Post Type Class
 	 */
 	class Page_For_CPT {
+
+		/**
+		 * Plugin File
+		 *
+		 * @var  string
+		 */
+		private static $file = __FILE__;
 
 		/**
 		 * Post Types
@@ -434,6 +435,50 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				add_permastruct( $post_type, "{$args->rewrite['slug']}/%$post_type%", $permastruct_args );
 
 			}
+
+		}
+
+		/**
+		 * Plugin Basename
+		 *
+		 * @return  string  Plugin basename.
+		 */
+		public static function basename() {
+
+			return plugin_basename( self::$file );
+
+		}
+
+		/**
+		 * Plugin Sub Directory
+		 *
+		 * @return  string  Plugin folder name.
+		 */
+		public static function sub_dir() {
+
+			return '/' . str_replace( basename( self::$file ), '', self::basename() );
+
+		}
+
+		/**
+		 * Plugin URL
+		 *
+		 * @return  string  Plugin directory URL.
+		 */
+		public static function url() {
+
+			return plugins_url( self::sub_dir() );
+
+		}
+
+		/**
+		 * Plugin Directory
+		 * 
+		 * @return  string  Plugin directory path.
+		 */
+		public static function dir() {
+
+			return plugin_dir_path( self::$file );
 
 		}
 
