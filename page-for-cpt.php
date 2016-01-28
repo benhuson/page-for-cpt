@@ -19,11 +19,7 @@ define( 'PAGE_FOR_CPT_DIR', plugin_dir_path( __FILE__ ) );
 // Don't load if class already exists
 if ( ! class_exists( 'Page_For_CPT' ) ) {
 
-	add_action( 'admin_init', array( 'Page_For_CPT', 'init_settings_field' ), 500 );
-	add_filter( 'body_class', array( 'Page_For_CPT', 'body_class' ) );
-	add_filter( 'get_the_archive_title', array( 'Page_For_CPT', 'get_the_archive_title' ) );
-	add_filter( 'get_the_archive_description', array( 'Page_For_CPT', 'get_the_archive_description' ) );
-	add_action( 'registered_post_type', array( 'Page_For_CPT', 'registered_post_type' ), 5, 2 );
+	add_action( 'plugins_loaded', array( 'Page_For_CPT', 'load' ) );
 
 	/**
 	 * Page for Custom Post Type Class
@@ -41,6 +37,20 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 * @var  array
 		 */
 		public static $post_types = array();
+
+		/**
+		 * Load
+		 */
+		public static function load() {
+
+			add_action( 'admin_init', array( get_class(), 'init_settings_field' ), 500 );
+			add_filter( 'body_class', array( get_class(), 'body_class' ) );
+			add_filter( 'get_the_archive_title', array( get_class(), 'get_the_archive_title' ) );
+			add_filter( 'get_the_archive_description', array( get_class(), 'get_the_archive_description' ) );
+			add_filter( 'register_post_type_args', array( get_class(), 'register_post_type_args' ), 10, 2 );
+			add_action( 'registered_post_type', array( get_class(), 'registered_post_type' ), 5, 2 );
+
+		}
 
 		/**
 		 * Init Settings Field
