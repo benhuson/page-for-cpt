@@ -43,8 +43,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			add_filter( 'body_class', array( get_class(), 'body_class' ) );
 			add_filter( 'get_the_archive_title', array( get_class(), 'get_the_archive_title' ) );
 			add_filter( 'get_the_archive_description', array( get_class(), 'get_the_archive_description' ) );
-			add_filter( 'register_post_type_args', array( get_class(), 'register_post_type_args' ), 10, 2 );
-			add_action( 'registered_post_type', array( get_class(), 'registered_post_type' ), 5, 2 );
+
+			if ( self::has_wp_version( '4.4' ) ) {
+				add_filter( 'register_post_type_args', array( get_class(), 'register_post_type_args' ), 10, 2 );
+			} else {
+				add_action( 'registered_post_type', array( get_class(), 'registered_post_type' ), 5, 2 );
+			}
 
 		}
 
@@ -343,6 +347,49 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		}
 
 		/**
+		 * Register Post Type Args
+		 *
+		 * Change the slug for post types.
+		 *
+		 * @internal  Called by `register_post_type_args` hook.
+		 *
+		 * @param   array   $args       Post type args.
+		 * @param   string  $post_type  Post type.
+		 * @return  array               Post type args.
+		 */
+		public static function register_post_type_args( $args, $post_type ) {
+
+			// Get all public custom post types.
+			$post_types = self::get_public_post_types();
+
+			if ( $args['public'] ) {
+
+				$page_for_cpt = self::get_page_for_post_type( $post_type );
+
+				if ( $page_for_cpt > 0 ) {
+
+					$uri = get_page_uri( $page_for_cpt );
+
+					// If a page is assigned, use that for the rewrite rules.
+					if ( ! empty( $uri ) ) {
+
+						$args['has_archive'] = $uri;
+						$args['rewrite'] = wp_parse_args( array(
+							'slug'       => $uri,
+							'with_front' => false
+						), (array) $args['rewrite'] );
+
+					}
+
+				}
+
+			}
+
+			return $args;
+
+		}
+
+		/**
 		 * Registered Post Type
 		 *
 		 * Called by the `registered_post_type` hook when a new post type is registered.
@@ -435,6 +482,20 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				add_permastruct( $post_type, "{$args->rewrite['slug']}/%$post_type%", $permastruct_args );
 
 			}
+
+		}
+
+		/**
+		 * Has WordPress Version
+		 *
+		 * @param   string  $version  Version in format `0.0.0`
+		 * @return  boolean           True if WordPress version is same or higher.
+		 */
+		public static function has_wp_version( $version ) {
+
+			global $wp_version;
+
+			return version_compare( $wp_version, $version ) >= 0;
 
 		}
 
