@@ -6,7 +6,7 @@ Plugin URI: https://github.com/benhuson/page-for-cpt
 Description: Specify a page to use for the base URL of a custom post type via your WordPress Reading Settings admin page. May not work with post types that specify their own custom permalink structure.
 Author: Ben Huson
 Author URI: https://github.com/benhuson/page-for-cpt
-Version: 0.3
+Version: 0.4
 License: GPLv2
 */
 
