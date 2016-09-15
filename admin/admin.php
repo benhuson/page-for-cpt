@@ -12,6 +12,7 @@ class Page_For_CPT_Admin {
 	/**
 	 * Init Settings Field
 	 *
+	 * @since     0.4
 	 * @internal  Called by the `admin_init` hook.
 	 */
 	public static function init_settings_field() {
@@ -31,6 +32,7 @@ class Page_For_CPT_Admin {
 	/**
 	 * Setting Field
 	 *
+	 * @since     0.4
 	 * @internal  Called by the `init_settings_field()`.
 	 */
 	public static function setting_field() {
@@ -100,6 +102,7 @@ class Page_For_CPT_Admin {
 	 *
 	 * When settings are changed, flush rewrite rules.
 	 *
+	 * @since     0.4
 	 * @internal  Called by the `init_settings_field()`.
 	 *
 	 * @param   string  $value  Value.

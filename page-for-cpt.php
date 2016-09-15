@@ -23,6 +23,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Plugin File
 		 *
+		 * @since  0.4
+		 *
 		 * @var  string
 		 */
 		private static $file = __FILE__;
@@ -36,6 +38,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Load
+		 *
+		 * @since  0.4
 		 */
 		public static function load() {
 
@@ -226,6 +230,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Get Page for CPT Option
 		 *
+		 * @since  0.4
+		 *
 		 * @return  array  Option data.
 		 */
 		public static function get_page_for_cpt_option() {
@@ -236,6 +242,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Get Public Post Types
+		 *
+		 * @since  0.4
 		 *
 		 * @return  array  Post types.
 		 */
@@ -253,6 +261,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 *
 		 * Change the slug for post types.
 		 *
+		 * @since     0.4
 		 * @internal  Called by `register_post_type_args` hook.
 		 *
 		 * @param   array   $args       Post type args.
@@ -390,6 +399,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Has WordPress Version
 		 *
+		 * @since  0.4
+		 *
 		 * @param   string  $version  Version in format `0.0.0`
 		 * @return  boolean           True if WordPress version is same or higher.
 		 */
@@ -404,6 +415,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Plugin Basename
 		 *
+		 * @since  0.4
+		 *
 		 * @return  string  Plugin basename.
 		 */
 		public static function basename() {
@@ -414,6 +427,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Plugin Sub Directory
+		 *
+		 * @since  0.4
 		 *
 		 * @return  string  Plugin folder name.
 		 */
@@ -426,6 +441,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Plugin URL
 		 *
+		 * @since  0.4
+		 *
 		 * @return  string  Plugin directory URL.
 		 */
 		public static function url() {
@@ -436,6 +453,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Plugin Directory
+		 *
+		 * @since  0.4
 		 * 
 		 * @return  string  Plugin directory path.
 		 */
