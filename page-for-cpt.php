@@ -37,6 +37,13 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		public static $post_types = array();
 
 		/**
+		 * Menu
+		 *
+		 * @var  Page_For_CPT_Menu|null
+		 */
+		private static $menu = null;
+
+		/**
 		 * Load
 		 *
 		 * @since  0.4
@@ -59,6 +66,12 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				} else {
 					require_once( self::dir() . 'admin/admin.php' );
 				}
+			} else {
+
+				require_once( self::dir() . 'includes/menu.php' );
+
+				self::$menu = new Page_For_CPT_Menu();
+
 			}
 
 		}
