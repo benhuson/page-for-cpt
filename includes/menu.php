@@ -20,6 +20,13 @@ class Page_For_CPT_Menu {
 	/**
 	 * Filters the CSS class(es) applied to a menu item's list item element.
 	 *
+	 * This filter adds `parent` and `ancestor` classes to any page menu item
+	 * that acts as an archive for the current single post type page.
+	 *
+	 * We treat the archive page as a `parent` if the current post page does
+	 * not have a parent post, and an as `ancestor` if the post is the child
+	 * of another post (hierarchical).
+	 *
 	 * @since     WP 3.0.0
 	 * @since     WP 4.1.0  The `$depth` parameter was added.
 	 * @internal  Called via the `nav_menu_css_class` filter.
@@ -31,6 +38,28 @@ class Page_For_CPT_Menu {
 	 * @return  array             CSS classes.
 	 */
 	public function nav_menu_css_class( $classes, $item, $args, $depth ) {
+
+		// Only check page menu items
+		if ( is_singular() && 'post_type' == $item->type && 'page' == $item->object ) {
+
+			$post_obj = get_queried_object();
+			$post_type = get_post_type( $post_obj );
+			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
+
+			// If the page menu item is an archive page, add classes
+			if ( $page_id > 0 && $item->object_id == $page_id && ! in_array( 'current-menu-parent', $classes ) ) {
+
+				// Parent or ancestor?
+				$relative = $post_obj->post_parent > 0 ? 'ancestor' : 'parent';
+
+				// Add `parent` or `ancestor` menu classes
+				$classes[] = 'current-menu-' . $relative;
+				$classes[] = 'current-post_type-' . $relative;
+				$classes[] = 'current-' . sanitize_html_class( $post_type ) . '-' . $relative;
+
+			}
+
+		}
 
 		return $classes;
 
