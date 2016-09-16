@@ -49,19 +49,34 @@ class Page_For_CPT_Menu {
 			// If the page menu item is an archive page, add classes
 			if ( $page_id > 0 && $item->object_id == $page_id && ! in_array( 'current-menu-parent', $classes ) ) {
 
-				// Parent or ancestor?
-				$relative = $post_obj->post_parent > 0 ? 'ancestor' : 'parent';
-
-				// Add `parent` or `ancestor` menu classes
-				$classes[] = 'current-menu-' . $relative;
-				$classes[] = 'current-post_type-' . $relative;
-				$classes[] = 'current-' . sanitize_html_class( $post_type ) . '-' . $relative;
+				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_obj );
 
 			}
 
 		}
 
 		return $classes;
+
+	}
+
+	/**
+	 * Add Archive Page Menu Item Classes
+	 *
+	 * @param   array    $classes  Menu item classes.
+	 * @param   WP_Post  $post     Post object.
+	 * @return  array              Classes.
+	 */
+	private function add_archive_page_menu_item_classes( $classes, $post ) {
+
+		// Parent or ancestor?
+		$relative = $post->post_parent > 0 ? 'ancestor' : 'parent';
+
+		// Add `parent` or `ancestor` menu classes
+		$classes[] = 'current-menu-' . $relative;
+		$classes[] = 'current-post_type-' . $relative;
+		$classes[] = 'current-' . sanitize_html_class( get_post_type( $post ) ) . '-' . $relative;
+
+		return array_unique( $classes );
 
 	}
 
