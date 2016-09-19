@@ -42,6 +42,7 @@ class Page_For_CPT_Menu {
 		if ( is_singular() && $this->is_page_menu_item( $item ) ) {
 
 			$post_obj = get_queried_object();
+
 			$post_type = get_post_type( $post_obj );
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
 			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
@@ -49,7 +50,7 @@ class Page_For_CPT_Menu {
 			// If the page menu item is an archive page, add classes
 			if ( $page_id > 0 && $item->object_id == $page_id ) {
 
-				$classes = $this->add_archive_page_menu_item_classes( $classes, get_post_type( $post_obj ), $post_obj->post_parent );
+				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_type, $post_obj->post_parent );
 
 			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
 
@@ -62,6 +63,7 @@ class Page_For_CPT_Menu {
 		if ( is_post_type_archive() && $this->is_page_menu_item( $item ) ) {
 
 			$post_type_obj = get_queried_object();
+
 			$post_type = $post_type_obj->name;
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
 			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
