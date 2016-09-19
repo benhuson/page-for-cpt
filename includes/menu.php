@@ -45,11 +45,16 @@ class Page_For_CPT_Menu {
 			$post_obj = get_queried_object();
 			$post_type = get_post_type( $post_obj );
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
+			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
 
 			// If the page menu item is an archive page, add classes
 			if ( $page_id > 0 && $item->object_id == $page_id && ! in_array( 'current-menu-parent', $classes ) ) {
 
 				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_obj );
+
+			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
+
+				$classes = $this->add_archive_ancestor_page_menu_item_classes( $classes, $post_obj );
 
 			}
 
@@ -75,6 +80,23 @@ class Page_For_CPT_Menu {
 		$classes[] = 'current-menu-' . $relative;
 		$classes[] = 'current-post_type-' . $relative;
 		$classes[] = 'current-' . sanitize_html_class( get_post_type( $post ) ) . '-' . $relative;
+
+		return array_unique( $classes );
+
+	}
+
+	/**
+	 * Add Archive Ancestor Page Menu Item Classes
+	 *
+	 * @param   array    $classes  Menu item classes.
+	 * @param   WP_Post  $post     Post object.
+	 * @return  array              Classes.
+	 */
+	private function add_archive_ancestor_page_menu_item_classes( $classes, $post ) {
+
+		// Add page `ancestor` menu classes
+		$classes[] = 'current-menu-ancestor';
+		$classes[] = 'current-page-ancestor';
 
 		return array_unique( $classes );
 
