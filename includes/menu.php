@@ -54,7 +54,7 @@ class Page_For_CPT_Menu {
 
 			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
 
-				$classes = $this->add_archive_ancestor_page_menu_item_classes( $classes, $post_obj );
+				$classes = $this->add_archive_ancestor_page_menu_item_classes( $classes );
 
 			}
 
@@ -88,11 +88,10 @@ class Page_For_CPT_Menu {
 	/**
 	 * Add Archive Ancestor Page Menu Item Classes
 	 *
-	 * @param   array    $classes  Menu item classes.
-	 * @param   WP_Post  $post     Post object.
-	 * @return  array              Classes.
+	 * @param   array  $classes  Menu item classes.
+	 * @return  array            Classes.
 	 */
-	private function add_archive_ancestor_page_menu_item_classes( $classes, $post ) {
+	private function add_archive_ancestor_page_menu_item_classes( $classes ) {
 
 		// Add page `ancestor` menu classes
 		$classes[] = 'current-menu-ancestor';
