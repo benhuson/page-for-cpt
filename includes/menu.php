@@ -43,7 +43,7 @@ class Page_For_CPT_Menu {
 
 			$post_obj = get_queried_object();
 
-			$post_type = get_post_type( $post_obj );
+			$post_type = $this->get_current_post_type();
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
 			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
 
@@ -64,7 +64,7 @@ class Page_For_CPT_Menu {
 
 			$post_type_obj = get_queried_object();
 
-			$post_type = $post_type_obj->name;
+			$post_type = $this->get_current_post_type();
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
 			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
 
@@ -94,6 +94,29 @@ class Page_For_CPT_Menu {
 	private function is_page_menu_item( $item ) {
 
 		return 'post_type' == $item->type && 'page' == $item->object;
+
+	}
+
+	/**
+	 * Get Current Post Type
+	 *
+	 * @return  string  Post type.
+	 */
+	private function get_current_post_type() {
+
+		$qo = get_queried_object();
+
+		if ( is_post_type_archive() ) {
+
+			return $qo->name;
+
+		} elseif ( is_singular() ) {
+
+			return get_post_type( $qo );
+
+		}
+
+		return '';
 
 	}
 
