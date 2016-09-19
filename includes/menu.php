@@ -13,7 +13,6 @@ class Page_For_CPT_Menu {
 	public function __construct() {
 
 		add_filter( 'nav_menu_css_class', array( $this, 'nav_menu_css_class' ), 10, 4 );
-		add_filter( 'wp_nav_menu_objects', array( $this, 'wp_nav_menu_objects' ), 10, 2 );
 
 	}
 
@@ -133,22 +132,6 @@ class Page_For_CPT_Menu {
 		$classes[] = 'current-page-ancestor';
 
 		return array_unique( $classes );
-
-	}
-
-	/**
-	 * Filters the sorted list of menu item objects before generating the menu's HTML.
-	 *
-	 * @since     WP 3.1.0
-	 * @internal  Called via the `wp_nav_menu_objects` filter.
-	 *
-	 * @param   array   $sorted_menu_items  The menu items, sorted by each menu item's menu order.
-	 * @param   object  $args               An object containing wp_nav_menu() arguments.
-	 * @return  array                       Menu items.
-	 */
-	public function wp_nav_menu_objects( $sorted_menu_items, $args ) {
-
-		return $sorted_menu_items;
 
 	}
 
