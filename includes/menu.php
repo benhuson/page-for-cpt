@@ -60,7 +60,42 @@ class Page_For_CPT_Menu {
 
 		}
 
+		if ( is_post_type_archive() && 'post_type' == $item->type && 'page' == $item->object ) {
+
+			$post_type_obj = get_queried_object();
+			$post_type = $post_type_obj->name;
+			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
+			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
+
+			// If the page menu item is an archive page, add classes
+			if ( $page_id > 0 && $item->object_id == $page_id ) {
+
+				$classes = $this->add_page_menu_item_classes( $classes );
+
+			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
+
+				$classes = $this->add_archive_ancestor_page_menu_item_classes( $classes );
+
+			}
+
+		}
+
 		return $classes;
+
+	}
+
+	/**
+	 * Add Page Menu Item Classes
+	 *
+	 * @param   array    $classes  Menu item classes.
+	 * @param   WP_Post  $post     Post object.
+	 * @return  array              Classes.
+	 */
+	private function add_page_menu_item_classes( $classes ) {
+
+		$classes[] = 'current-menu-item';
+
+		return array_unique( $classes );
 
 	}
 
