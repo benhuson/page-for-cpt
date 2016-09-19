@@ -49,7 +49,7 @@ class Page_For_CPT_Menu {
 			// If the page menu item is an archive page, add classes
 			if ( $page_id > 0 && $item->object_id == $page_id ) {
 
-				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_obj );
+				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_obj, $post_obj->post_parent );
 
 			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
 
@@ -115,12 +115,13 @@ class Page_For_CPT_Menu {
 	 *
 	 * @param   array    $classes  Menu item classes.
 	 * @param   WP_Post  $post     Post object.
+	 * @param   integer  $parent   Post parent.
 	 * @return  array              Classes.
 	 */
-	private function add_archive_page_menu_item_classes( $classes, $post ) {
+	private function add_archive_page_menu_item_classes( $classes, $post, $parent = 0 ) {
 
 		// Parent or ancestor?
-		$relative = $post->post_parent > 0 ? 'ancestor' : 'parent';
+		$relative = $parent > 0 ? 'ancestor' : 'parent';
 
 		// Add `parent` or `ancestor` menu classes
 		$classes[] = 'current-menu-' . $relative;
