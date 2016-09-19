@@ -48,7 +48,7 @@ class Page_For_CPT_Menu {
 			$page_ancestor_ids = get_ancestors( $page_id, 'page' );
 
 			// If the page menu item is an archive page, add classes
-			if ( $page_id > 0 && $item->object_id == $page_id && ! in_array( 'current-menu-parent', $classes ) ) {
+			if ( $page_id > 0 && $item->object_id == $page_id ) {
 
 				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_obj );
 
