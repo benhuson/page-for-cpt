@@ -39,7 +39,7 @@ class Page_For_CPT_Menu {
 	public function nav_menu_css_class( $classes, $item, $args, $depth ) {
 
 		// Only check page menu items
-		if ( is_singular() && 'post_type' == $item->type && 'page' == $item->object ) {
+		if ( is_singular() && $this->is_page_menu_item( $item ) ) {
 
 			$post_obj = get_queried_object();
 			$post_type = get_post_type( $post_obj );
@@ -59,7 +59,7 @@ class Page_For_CPT_Menu {
 
 		}
 
-		if ( is_post_type_archive() && 'post_type' == $item->type && 'page' == $item->object ) {
+		if ( is_post_type_archive() && $this->is_page_menu_item( $item ) ) {
 
 			$post_type_obj = get_queried_object();
 			$post_type = $post_type_obj->name;
@@ -80,6 +80,18 @@ class Page_For_CPT_Menu {
 		}
 
 		return $classes;
+
+	}
+
+	/**
+	 * Menu Item Is Page
+	 *
+	 * @param   WP_Post  $item  Menu item object.
+	 * @return  boolean
+	 */
+	private function is_page_menu_item( $item ) {
+
+		return 'post_type' == $item->type && 'page' == $item->object;
 
 	}
 
