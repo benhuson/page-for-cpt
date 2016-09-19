@@ -50,7 +50,10 @@ class Page_For_CPT_Menu {
 			// If the page menu item is an archive page, add classes
 			if ( $page_id > 0 && $item->object_id == $page_id ) {
 
-				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_type, $post_obj->post_parent );
+				// Parent or ancestor?
+				$relation = $post_obj->post_parent > 0 ? 'ancestor' : 'parent';
+
+				$classes = $this->add_archive_page_menu_item_classes( $classes, $post_type, $relation );
 
 			} elseif ( ! empty( $page_ancestor_ids ) && in_array( $item->object_id, $page_ancestor_ids ) ) {
 
@@ -61,8 +64,6 @@ class Page_For_CPT_Menu {
 		}
 
 		if ( is_post_type_archive() && $this->is_page_menu_item( $item ) ) {
-
-			$post_type_obj = get_queried_object();
 
 			$post_type = $this->get_current_post_type();
 			$page_id = Page_For_CPT::get_page_for_post_type( $post_type );
@@ -143,15 +144,16 @@ class Page_For_CPT_Menu {
 	 * @param   integer         $parent   Post parent.
 	 * @return  array                     Classes.
 	 */
-	private function add_archive_page_menu_item_classes( $classes, $post_type = '', $parent = 0 ) {
+	private function add_archive_page_menu_item_classes( $classes, $post_type = '', $relation = '' ) {
 
-		// Parent or ancestor?
-		$relative = $parent > 0 ? 'ancestor' : 'parent';
+		// Sanitize class vars
+		$post_type = sanitize_html_class( $post_type );
+		$relation = sanitize_html_class( $relation );
 
 		// Add `parent` or `ancestor` menu classes
-		$classes[] = 'current-menu-' . $relative;
-		$classes[] = 'current-post_type-' . $relative;
-		$classes[] = 'current-' . sanitize_html_class( $post_type ) . '-' . $relative;
+		$classes[] = 'current-menu-' . $relation;
+		$classes[] = 'current-post_type-' . $relation;
+		$classes[] = 'current-' . $post_type . '-' . $relation;
 
 		return array_unique( $classes );
 
