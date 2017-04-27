@@ -6,6 +6,7 @@
  */
 
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
+add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
 
 class Page_For_CPT_Admin {
 
@@ -117,6 +118,28 @@ class Page_For_CPT_Admin {
 		}
 
 		return $value;
+
+	}
+
+	/**
+	 * Fix No Editor On Posts Page
+	 * 
+	 * Add the wp-editor back into WordPress after it was removed in 4.2.2.
+	 *
+	 * @internal  Private. Called via the `edit_form_after_title` action.
+	 *
+	 * @see  /wp-admin/edit-form-advanced.php
+	 *
+	 * @param  WP_Post  $post  Post object.
+	 */
+	public static function fix_no_editor_on_posts_page( $post ) {
+
+		if ( $post->ID != get_option( 'page_for_posts' ) ) {
+			return;
+		}
+
+		remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
+		add_post_type_support( 'page', 'editor' );
 
 	}
 
