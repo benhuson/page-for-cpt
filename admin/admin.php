@@ -126,6 +126,7 @@ class Page_For_CPT_Admin {
 	 * 
 	 * Add the wp-editor back into WordPress after it was removed in 4.2.2.
 	 *
+	 * @since     0.5
 	 * @internal  Private. Called via the `edit_form_after_title` action.
 	 *
 	 * @see  /wp-admin/edit-form-advanced.php
