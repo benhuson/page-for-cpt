@@ -7,6 +7,7 @@
 
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
 add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
+add_filter( 'display_post_states', array( 'Page_For_CPT_Admin', 'display_post_states' ), 8, 2 );
 
 class Page_For_CPT_Admin {
 
@@ -118,6 +119,28 @@ class Page_For_CPT_Admin {
 		}
 
 		return $value;
+
+	}
+
+	/**
+	 * Display Post States
+	 *
+	 * @param   array    $post_states  Post states.
+	 * @param   WP_Post  $post         Post object.
+	 * @return  array                  States.
+	 */
+	public static function display_post_states( $post_states, $post ) {
+
+		$page_for_cpt = Page_For_CPT::get_page_for_cpt_option();
+		$post_type = array_search( $post->ID, $page_for_cpt );
+
+		// Is post type page
+		if ( ! empty( $post_type ) ) {
+			$post_type_object = get_post_type_object( $post_type );
+			$post_states[ 'page_for_cpt' ] = sprintf( esc_html__( '%s Page', 'page-for-cpt' ), esc_html( $post_type_object->labels->name ) );
+		}
+
+		return $post_states;
 
 	}
 
