@@ -145,7 +145,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				if ( is_home() ) {
 					$page_id = get_option( 'page_for_posts' );
 				} else {
-					$page_id = self::get_page_for_post_type( get_post_type() );
+					$page_id = self::get_page_for_post_type( get_queried_object()->name );
 				}
 
 				if ( $page_id > 0 ) {
@@ -173,7 +173,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				if ( is_home() ) {
 					$page_id = get_option( 'page_for_posts' );
 				} else {
-					$page_id = self::get_page_for_post_type( get_post_type() );
+					$page_id = self::get_page_for_post_type( get_queried_object()->name );
 				}
 
 				if ( $page_id > 0 ) {
