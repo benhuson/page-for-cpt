@@ -10,6 +10,8 @@ Version: 0.5
 License: GPLv2
 */
 
+if ( ! defined( 'ABSPATH' ) ) exit;  // Exit if accessed directly.
+
 // Don't load if class already exists
 if ( ! class_exists( 'Page_For_CPT' ) ) {
 

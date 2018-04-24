@@ -5,6 +5,8 @@
  * @subpackage  Admin
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;  // Exit if accessed directly.
+
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
 add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
 add_filter( 'display_post_states', array( 'Page_For_CPT_Admin', 'display_post_states' ), 8, 2 );
