@@ -127,6 +127,9 @@ class Page_For_CPT_Admin {
 	/**
 	 * Display Post States
 	 *
+	 * @since     0.6
+	 * @internal  Called by the `display_post_states` filter.
+	 *
 	 * @param   array    $post_states  Post states.
 	 * @param   WP_Post  $post         Post object.
 	 * @return  array                  States.
@@ -174,6 +177,9 @@ class Page_For_CPT_Admin {
 	 *
 	 * Set flag the permalink rewrite rules need flushing.
 	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `update_option_page_for_cpt` action.
+	 *
 	 * @param  string  $old_value  Old value.
 	 * @param  string  $value      New value.
 	 * @param  string  $option     Option.
@@ -190,6 +196,9 @@ class Page_For_CPT_Admin {
 	 * Flush Permalinks
 	 *
 	 * Flush rewrite rules if flag set.
+	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `admin_init` action.
 	 */
 	public static function flush_permalinks() {
 

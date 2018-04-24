@@ -32,6 +32,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Post Types
 		 *
+		 * @since  0.1
+		 *
 		 * @var  array
 		 */
 		public static $post_types = array();
@@ -67,6 +69,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * The Post
 		 *
+		 * @since  0.1
+		 *
 		 * @param   string   $post_type  Post type.
 		 * @return  boolean
 		 */
@@ -95,6 +99,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Body Class
+		 *
+		 * @since  0.1
 		 *
 		 * @param   array  $classes  Body classes.
 		 * @return  array            Body classes.
@@ -191,6 +197,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Get Post Type for Page
 		 *
+		 * @since  0.2
+		 *
 		 * @return  string|false  Post type.
 		 */
 		public static function get_post_type_for_page() {
@@ -212,6 +220,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Get Page for Post Type
+		 *
+		 * @since  0.2
 		 *
 		 * @param   string  $post_type  Post type.
 		 * @return  int                 Post ID.
@@ -356,6 +366,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 * See the register_post_type() function in `wp-includes/post.php`
 		 * https://core.trac.wordpress.org/browser/trunk/src/wp-includes/post.php#L1427
 		 *
+		 * @since  0.3
+		 * @internal
+		 *
 		 * @param  string  $post_type  Post type.
 		 * @param  array   $args       Post type args.
 		 */
@@ -403,6 +416,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 * Add back "Edit Page" tolbar item when viewing a post type archive
 		 * which has an associated page.
 		 *
+		 * @since     0.6
 		 * @internal  Private. Called via `wp_before_admin_bar_render` actions.
 		 */
 		public static function toolbar_item() {
