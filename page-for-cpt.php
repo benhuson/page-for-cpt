@@ -46,6 +46,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			add_filter( 'body_class', array( get_class(), 'body_class' ) );
 			add_filter( 'get_the_archive_title', array( get_class(), 'get_the_archive_title' ) );
 			add_filter( 'get_the_archive_description', array( get_class(), 'get_the_archive_description' ) );
+			add_action( 'wp_before_admin_bar_render', array( get_class(), 'toolbar_item' ) );
 
 			if ( self::has_wp_version( '4.4' ) ) {
 				add_filter( 'register_post_type_args', array( get_class(), 'register_post_type_args' ), 10, 2 );
@@ -391,6 +392,44 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				$permastruct_args = $args->rewrite;
 				$permastruct_args['feed'] = $permastruct_args['feeds'];
 				add_permastruct( $post_type, "{$args->rewrite['slug']}/%$post_type%", $permastruct_args );
+
+			}
+
+		}
+
+		/**
+		 * Toolbar Item
+		 *
+		 * Add back "Edit Page" tolbar item when viewing a post type archive
+		 * which has an associated page.
+		 *
+		 * @internal  Private. Called via `wp_before_admin_bar_render` actions.
+		 */
+		public static function toolbar_item() {
+
+			global $wp_admin_bar;
+
+			$current_object = get_queried_object();
+
+			if ( ! is_admin() && is_post_type_archive() && ! empty( $current_object ) ) {
+
+				$page_id = self::get_page_for_post_type( $current_object->name );
+				$post_type_object = get_post_type_object( 'page' );
+
+				if ( ! empty( $page_id )
+					&& $post_type_object
+					&& current_user_can( 'edit_post', $page_id )
+					&& $post_type_object->show_in_admin_bar
+					&& $edit_post_link = get_edit_post_link( $page_id )
+					) {
+
+					$wp_admin_bar->add_menu( array(
+						'id'    => 'edit',
+						'title' => $post_type_object->labels->edit_item,
+						'href'  => $edit_post_link
+					) );
+
+				}
 
 			}
 
