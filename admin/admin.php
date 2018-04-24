@@ -8,6 +8,8 @@
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
 add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
 add_filter( 'display_post_states', array( 'Page_For_CPT_Admin', 'display_post_states' ), 8, 2 );
+add_action( 'update_option_page_for_cpt', array( 'Page_For_CPT_Admin', 'option_updated' ), 10, 3 );
+add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'flush_permalinks' ) );
 
 class Page_For_CPT_Admin {
 
@@ -164,6 +166,37 @@ class Page_For_CPT_Admin {
 
 		remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 		add_post_type_support( 'page', 'editor' );
+
+	}
+
+	/**
+	 * Option Updated
+	 *
+	 * Set flag the permalink rewrite rules need flushing.
+	 *
+	 * @param  string  $old_value  Old value.
+	 * @param  string  $value      New value.
+	 * @param  string  $option     Option.
+	 */
+	public static function option_updated( $old_value, $value, $option ) {
+
+		if ( $old_value !== $value ) {
+			update_option( 'page_for_cpt_requires_flush', 1 );
+		}
+
+	}
+
+	/**
+	 * Flush Permalinks
+	 *
+	 * Flush rewrite rules if flag set.
+	 */
+	public static function flush_permalinks() {
+
+		if ( 1 == get_option( 'page_for_cpt_requires_flush', 1 ) ) {
+			flush_rewrite_rules();
+			update_option( 'page_for_cpt_requires_flush', 0 );
+		}
 
 	}
 
