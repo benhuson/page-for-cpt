@@ -5,6 +5,8 @@
  * @subpackage  Admin
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;  // Exit if accessed directly.
+
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
 add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
 add_filter( 'display_post_states', array( 'Page_For_CPT_Admin', 'display_post_states' ), 8, 2 );
@@ -127,6 +129,9 @@ class Page_For_CPT_Admin {
 	/**
 	 * Display Post States
 	 *
+	 * @since     0.6
+	 * @internal  Called by the `display_post_states` filter.
+	 *
 	 * @param   array    $post_states  Post states.
 	 * @param   WP_Post  $post         Post object.
 	 * @return  array                  States.
@@ -174,6 +179,9 @@ class Page_For_CPT_Admin {
 	 *
 	 * Set flag the permalink rewrite rules need flushing.
 	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `update_option_page_for_cpt` action.
+	 *
 	 * @param  string  $old_value  Old value.
 	 * @param  string  $value      New value.
 	 * @param  string  $option     Option.
@@ -190,6 +198,9 @@ class Page_For_CPT_Admin {
 	 * Flush Permalinks
 	 *
 	 * Flush rewrite rules if flag set.
+	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `admin_init` action.
 	 */
 	public static function flush_permalinks() {
 
