@@ -1,14 +1,16 @@
 <?php
 
 /*
-Plugin Name: Page for CPT
+Plugin Name: Page for Custom Post Type
 Plugin URI: https://github.com/benhuson/page-for-cpt
 Description: Specify a page to use for the base URL of a custom post type via your WordPress Reading Settings admin page. May not work with post types that specify their own custom permalink structure.
 Author: Ben Huson
 Author URI: https://github.com/benhuson/page-for-cpt
-Version: 0.5
+Version: 0.6
 License: GPLv2
 */
+
+if ( ! defined( 'ABSPATH' ) ) exit;  // Exit if accessed directly.
 
 // Don't load if class already exists
 if ( ! class_exists( 'Page_For_CPT' ) ) {
@@ -32,6 +34,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		/**
 		 * Post Types
 		 *
+		 * @since  0.1
+		 *
 		 * @var  array
 		 */
 		public static $post_types = array();
@@ -46,6 +50,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 			add_filter( 'body_class', array( get_class(), 'body_class' ) );
 			add_filter( 'get_the_archive_title', array( get_class(), 'get_the_archive_title' ) );
 			add_filter( 'get_the_archive_description', array( get_class(), 'get_the_archive_description' ) );
+			add_action( 'wp_before_admin_bar_render', array( get_class(), 'toolbar_item' ) );
 
 			if ( self::has_wp_version( '4.4' ) ) {
 				add_filter( 'register_post_type_args', array( get_class(), 'register_post_type_args' ), 10, 2 );
@@ -65,6 +70,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * The Post
+		 *
+		 * @since  0.1
 		 *
 		 * @param   string   $post_type  Post type.
 		 * @return  boolean
@@ -94,6 +101,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Body Class
+		 *
+		 * @since  0.1
 		 *
 		 * @param   array  $classes  Body classes.
 		 * @return  array            Body classes.
@@ -145,7 +154,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				if ( is_home() ) {
 					$page_id = get_option( 'page_for_posts' );
 				} else {
-					$page_id = self::get_page_for_post_type( get_post_type() );
+					$page_id = self::get_page_for_post_type( get_queried_object()->name );
 				}
 
 				if ( $page_id > 0 ) {
@@ -173,7 +182,7 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				if ( is_home() ) {
 					$page_id = get_option( 'page_for_posts' );
 				} else {
-					$page_id = self::get_page_for_post_type( get_post_type() );
+					$page_id = self::get_page_for_post_type( get_queried_object()->name );
 				}
 
 				if ( $page_id > 0 ) {
@@ -189,6 +198,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Get Post Type for Page
+		 *
+		 * @since  0.2
 		 *
 		 * @return  string|false  Post type.
 		 */
@@ -211,6 +222,8 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 
 		/**
 		 * Get Page for Post Type
+		 *
+		 * @since  0.2
 		 *
 		 * @param   string  $post_type  Post type.
 		 * @return  int                 Post ID.
@@ -355,6 +368,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 		 * See the register_post_type() function in `wp-includes/post.php`
 		 * https://core.trac.wordpress.org/browser/trunk/src/wp-includes/post.php#L1427
 		 *
+		 * @since  0.3
+		 * @internal
+		 *
 		 * @param  string  $post_type  Post type.
 		 * @param  array   $args       Post type args.
 		 */
@@ -391,6 +407,45 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 				$permastruct_args = $args->rewrite;
 				$permastruct_args['feed'] = $permastruct_args['feeds'];
 				add_permastruct( $post_type, "{$args->rewrite['slug']}/%$post_type%", $permastruct_args );
+
+			}
+
+		}
+
+		/**
+		 * Toolbar Item
+		 *
+		 * Add back "Edit Page" tolbar item when viewing a post type archive
+		 * which has an associated page.
+		 *
+		 * @since     0.6
+		 * @internal  Private. Called via `wp_before_admin_bar_render` actions.
+		 */
+		public static function toolbar_item() {
+
+			global $wp_admin_bar;
+
+			$current_object = get_queried_object();
+
+			if ( ! is_admin() && is_post_type_archive() && ! empty( $current_object ) ) {
+
+				$page_id = self::get_page_for_post_type( $current_object->name );
+				$post_type_object = get_post_type_object( 'page' );
+
+				if ( ! empty( $page_id )
+					&& $post_type_object
+					&& current_user_can( 'edit_post', $page_id )
+					&& $post_type_object->show_in_admin_bar
+					&& $edit_post_link = get_edit_post_link( $page_id )
+					) {
+
+					$wp_admin_bar->add_menu( array(
+						'id'    => 'edit',
+						'title' => $post_type_object->labels->edit_item,
+						'href'  => $edit_post_link
+					) );
+
+				}
 
 			}
 

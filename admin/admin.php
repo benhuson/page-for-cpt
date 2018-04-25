@@ -5,8 +5,13 @@
  * @subpackage  Admin
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;  // Exit if accessed directly.
+
 add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'init_settings_field' ), 500 );
 add_action( 'edit_form_after_title', array( 'Page_For_CPT_Admin', 'fix_no_editor_on_posts_page' ), 0 );
+add_filter( 'display_post_states', array( 'Page_For_CPT_Admin', 'display_post_states' ), 8, 2 );
+add_action( 'update_option_page_for_cpt', array( 'Page_For_CPT_Admin', 'option_updated' ), 10, 3 );
+add_action( 'admin_init', array( 'Page_For_CPT_Admin', 'flush_permalinks' ) );
 
 class Page_For_CPT_Admin {
 
@@ -122,6 +127,31 @@ class Page_For_CPT_Admin {
 	}
 
 	/**
+	 * Display Post States
+	 *
+	 * @since     0.6
+	 * @internal  Called by the `display_post_states` filter.
+	 *
+	 * @param   array    $post_states  Post states.
+	 * @param   WP_Post  $post         Post object.
+	 * @return  array                  States.
+	 */
+	public static function display_post_states( $post_states, $post ) {
+
+		$page_for_cpt = Page_For_CPT::get_page_for_cpt_option();
+		$post_type = array_search( $post->ID, $page_for_cpt );
+
+		// Is post type page
+		if ( ! empty( $post_type ) ) {
+			$post_type_object = get_post_type_object( $post_type );
+			$post_states[ 'page_for_cpt' ] = sprintf( esc_html__( '%s Page', 'page-for-cpt' ), esc_html( $post_type_object->labels->name ) );
+		}
+
+		return $post_states;
+
+	}
+
+	/**
 	 * Fix No Editor On Posts Page
 	 * 
 	 * Add the wp-editor back into WordPress after it was removed in 4.2.2.
@@ -141,6 +171,43 @@ class Page_For_CPT_Admin {
 
 		remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 		add_post_type_support( 'page', 'editor' );
+
+	}
+
+	/**
+	 * Option Updated
+	 *
+	 * Set flag the permalink rewrite rules need flushing.
+	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `update_option_page_for_cpt` action.
+	 *
+	 * @param  string  $old_value  Old value.
+	 * @param  string  $value      New value.
+	 * @param  string  $option     Option.
+	 */
+	public static function option_updated( $old_value, $value, $option ) {
+
+		if ( $old_value !== $value ) {
+			update_option( 'page_for_cpt_requires_flush', 1 );
+		}
+
+	}
+
+	/**
+	 * Flush Permalinks
+	 *
+	 * Flush rewrite rules if flag set.
+	 *
+	 * @since     0.6
+	 * @internal  Private. Called via the `admin_init` action.
+	 */
+	public static function flush_permalinks() {
+
+		if ( 1 == get_option( 'page_for_cpt_requires_flush', 1 ) ) {
+			flush_rewrite_rules();
+			update_option( 'page_for_cpt_requires_flush', 0 );
+		}
 
 	}
 
