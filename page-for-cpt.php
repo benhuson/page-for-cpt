@@ -297,9 +297,9 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 					// If a page is assigned, use that for the rewrite rules.
 					if ( ! empty( $uri ) ) {
 
-						$args['has_archive'] = $uri;
+						$args['has_archive'] = apply_filters( 'page_for_cpt_post_archive_slug', $uri, $post_type );
 						$args['rewrite'] = wp_parse_args( array(
-							'slug'       => $uri,
+							'slug'       => apply_filters( 'page_for_cpt_post_slug', $uri, $post_type ),
 							'with_front' => false
 						), (array) $args['rewrite'] );
 
@@ -342,10 +342,10 @@ if ( ! class_exists( 'Page_For_CPT' ) ) {
 					// If a page is assigned, use that for the rewrite rules.
 					if ( ! empty( $uri ) ) {
 
-						$args->has_archive = $uri;
+						$args->has_archive = apply_filters( 'page_for_cpt_post_archive_slug', $uri, $post_type );
 
 						$args->rewrite = wp_parse_args( array(
-							'slug'       => $uri,
+							'slug'       => apply_filters( 'page_for_cpt_post_slug', $uri, $post_type ),
 							'with_front' => false
 						), (array) $args->rewrite );
 
